@@ -7,5 +7,11 @@ def main():
     print(f"Start pos: {default_maze.start_position}")
     print(f"Goal pos: {default_maze.goal_position}")
 
+    print("TEST PRIMS:")
+    prims_maze = Maze.from_prims(15, 11)
+    print(prims_maze)
+    print(f"Start pos: {prims_maze.start_position}")
+    print(f"Goal pos: {prims_maze.goal_position}")
+
 if __name__ == "__main__":
     main()
