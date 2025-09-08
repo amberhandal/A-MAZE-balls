@@ -15,14 +15,18 @@ class Robot():
         if dir == 0:
             if maze[self.x+1][self.y] != '#':
                 self.x += 1 
+                print(self)
         elif dir == 1:
             if maze[self.x][self.y+1] != '#':
                 self.y += 1
+                print(self)
         elif dir == 2:
             if maze[self.x-1][self.y] != '#':
                 self.x -= 1
+                print(self)
         else:
             if maze[self.x][self.y-1] == '#':
                 self.y -= 1
+                print(self)
 
         
