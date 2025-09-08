@@ -5,7 +5,9 @@ class Belief_Status():
         self.w = w
         self.h = h
         self.tot = 0
+        self.old_loc = np.empty((h, w), dtype=int)
         self.loc = np.empty((h, w), dtype=int)
+
     def set_locations(self, maze):
         for i in range(self.h):
             for j in range(self.w):
@@ -16,7 +18,7 @@ class Belief_Status():
                     self.loc[i][j] = 0
     
     def new_move(self, maze, dir):
-        
+        self.old_loc = self.loc.copy()
         for i in range(self.h):
             for j in range(self.w):
                 if self.loc[i][j] == 1 or self.loc[i][j] == 12:
@@ -27,15 +29,20 @@ class Belief_Status():
         self.update_total()
     
     def update_total(self):
-        self.tot = 0
+        new_tot = 0
         for i in range(self.h):
             for j in range(self.w):
                 if self.loc[i][j] > 1:
                     self.loc[i][j] = 1
-                    self.tot += 1
+                    new_tot += 1
                 elif self.loc[i][j] == 1:
-                    self.tot += 1   
-        print(self.loc)     
+                    new_tot += 1   
+        print(self.loc)
+        if new_tot >= self.tot:
+            self.loc = self.old_loc.copy()
+        else:
+            self.tot = new_tot
+
     
     def check_viable(self, dir, maze, x, y):
         if dir == 0:
@@ -70,7 +77,7 @@ class Belief_Status():
             else:
                 self.loc[x+1][y] = 2
 
-            if (self.loc[x][y] <= 1):
+            if self.loc[x][y] <= 1:
                 self.loc[x][y] = 0
             
         elif dir == 1:
@@ -79,7 +86,7 @@ class Belief_Status():
             else:
                 self.loc[x][y+1] = 2
                 
-            if (self.loc[x][y] <= 1):
+            if self.loc[x][y] <= 1:
                 self.loc[x][y] = 0
         elif dir == 2:
             if self.loc[x-1][y] == 1:
@@ -87,7 +94,7 @@ class Belief_Status():
             else:
                 self.loc[x-1][y] = 2
 
-            if (self.loc[x][y] <= 1):
+            if self.loc[x][y] <= 1:
                 self.loc[x][y] = 0
         else:
             if self.loc[x][y-1] == 1:
@@ -95,7 +102,7 @@ class Belief_Status():
             else:
                 self.loc[x][y-1] = 2
 
-            if (self.loc[x][y] <= 1):
+            if self.loc[x][y] <= 1:
                 self.loc[x][y] = 0
 
     def update_no(self, dir, x, y):
