@@ -5,33 +5,38 @@ from robot import Robot
 
 maze_name = "test-maze.txt"
 
-Class Belief_Status():
-    def __init__(self, w, h, tot):
+class Belief_Status():
+    def __init__(self, w, h):
         self.w = w
         self.h = h
-        self.tot = tot
-        self.loc = numpy.empty((h, w), dtype=int)
+        self.tot = 0
+        self.loc = np.empty((h, w), dtype=int)
 
     def set_locations(self, maze):
-        for i in len(maze):
-            for j in len(maze[i])
+        for i in range(self.h):
+            for j in range(self.w):
                 if maze[i][j] == ' ' or maze[i][j] == 'R' or maze[i][j] == 'G':
-                    loc[i][j] = 1
-                    tot += 1
-                else
-                    loc[i][j] = 0
+                    self.loc[i][j] = 1
+                    self.tot += 1
+                else:
+                    self.loc[i][j] = 0
     
-    def new_move(self, maze):
-        z = 0
-        for i in range(h):
-            for j in range(w):
-                if (loc == 1):
-                    if check_viable(z, maze, i, j):
-                        update_avail(z, x, y)
+    def new_move(self, maze, dir):
+        for i in range(self.h):
+            for j in range(self.w):
+                if (self.loc[i][j] == 1):
+                    if self.check_viable(dir, maze, i, j):
+                        self.update_avail(dir, i, j)
                     else:
-                        update_no(z, x, y)
+                        self.update_no(dir, i, j)
+        self.update_total()
 
-                
+    def update_total(self):
+        self.tot = 0
+        for i in range(self.h):
+            for j in range(self.w):
+                if self.loc[i][j] == 1:
+                    self.tot += 1        
     
     def check_viable(self, dir, maze, x, y):
         if dir == 0:
@@ -61,27 +66,33 @@ Class Belief_Status():
 
     def update_avail(self, dir, x, y):
         if dir == 0:
-            loc[x+1][y] = 1
-            loc[x][y] = 0
+            self.loc[x+1][y] = 1
+            self.loc[x][y] = 0
         elif dir == 1:
-            loc[x][y+1] = 1
-            loc[x][y] = 0
+            self.loc[x][y+1] = 1
+            self.loc[x][y] = 0
         elif dir == 2:
-            loc[x-1][y] = 1
-            loc[x][y] = 0
+            self.loc[x-1][y] = 1
+            self.loc[x][y] = 0
         else:
-            loc[x][y-1] = 1
-            loc[x][y] = 0
+            self.loc[x][y-1] = 1
+            self.loc[x][y] = 0
 
     def update_no(self, dir, x, y):
         if dir == 0:
-            loc[x+1][y] = 0
+            self.loc[x+1][y] = 0
         elif dir == 1:
-            loc[x][y+1] = 0
+            self.loc[x][y+1] = 0
         elif dir == 2:
-            loc[x-1][y] = 0
+            self.loc[x-1][y] = 0
         else:
-            loc[x][y-1] = 0
+            self.loc[x][y-1] = 0
+
+    def final_loc(self):
+        for i in range(self.h):
+            for j in range(self.w):
+                if self.loc[i][j] == 1:
+                    return np.array([i, j])      
 
 
 # def belief():
@@ -92,6 +103,7 @@ def main():
     goal = np.array([0, 0])
     start = np.array([0, 0]) 
     maze = np.empty((h, w), dtype=str)
+    
     with open(maze_name) as f:
         i = 0
         for x in f:
@@ -110,9 +122,24 @@ def main():
             print(char, end=" ")
         print()
 
-    lil_guy = Robot(start[0], start[1], False)
+    lil_guy = Robot(start[0], start[1])
+    loc = np.array([0, 0])
+    robot_knows = Belief_Status(w, h)
+    robot_knows.set_locations(maze)
+    while True:
+        for i in range(4):
+            lil_guy.move(i, maze)
+            tmp = robot_knows.tot
+            robot_knows.new_move(maze, i)
+            if robot_knows.tot < tmp:
+                break
+        if robot_knows.tot == 1:
+            loc = robot_knows.final_loc()
+            break
+    
+    print(lil_guy)
+    print(loc)
 
-    # while true:
-        
+
 if __name__ == "__main__":
     main()
