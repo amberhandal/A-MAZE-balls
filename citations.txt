@@ -1,1 +1,2 @@
 [1] https://inventwithpython.com/recursion/chapter4.html
+[2] https://www.w3schools.com/python/python_file_open.asp
