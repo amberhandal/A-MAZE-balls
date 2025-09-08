@@ -1,16 +1,19 @@
 # manual maze generation for robot simulation using ascii art
-# "#" represents walls, " " represents non-wall spaces, "R" represents the robot's starting position, "G" represents the goal position
-
+# "█"represents walls, " " represents non-wall spaces, "R" represents the robot's starting position, "G" represents the goal position
+# TODO: refactor
+# TODO: add citations
+# TODO: start pos and goal pos should be a min distance from eachother
 from dataclasses import dataclass
 from typing import List, Tuple, Optional
 import json
 import numpy as np
+import random
 
 Pos = Tuple[int, int]
 
 @dataclass(frozen=True)
 class MazeSymbols:
-    WALL: str = '#'
+    WALL: str = '█'
     EMPTY: str = ' '
     START: str = 'R'
     GOAL: str = 'G'
@@ -60,3 +63,58 @@ class Maze:
             if maze_key not in data:
                 raise KeyError(f"Maze key '{maze_key}' not found in template file")
             return Maze(data[maze_key]['grid'])
+        
+    @staticmethod
+    def from_prims(width: int, height: int) -> 'Maze':
+        WALL = MazeSymbols.WALL
+        EMPTY = MazeSymbols.EMPTY
+        START = MazeSymbols.START
+        GOAL = MazeSymbols.GOAL
+
+        # all cells are walls initially
+        grid = [[WALL for _ in range(width)] for _ in range(height)]
+
+        def in_bounds(row: int, col: int) -> bool:
+            return 1 <= row < height-1 and 1 <= col < width-1
+
+        def adjacent_cells(row: int, col: int):
+            for r, c in [(-1,0), (1,0), (0,-1), (0,1)]:
+                next_row, next_col = row + r, col + c
+                if in_bounds(next_row, next_col):
+                    yield next_row, next_col
+
+        # start generation away from borders
+        row = random.randint(1, height - 2)
+        col = random.randint(1, width - 2)
+        grid[row][col] = EMPTY
+
+        frontier = set()
+        for next_row, next_col in adjacent_cells(row, col):
+            if grid[next_row][next_col] == WALL:
+                frontier.add((next_row, next_col))
+
+        while frontier:
+            next_cell = random.choice(tuple(frontier))
+            frontier.remove(next_cell)
+            next_row, next_col = next_cell
+
+            empty_count = 0
+            for adjacent_row, adjacent_col in adjacent_cells(next_row, next_col):
+                if grid[adjacent_row][adjacent_col] == EMPTY:
+                    empty_count += 1
+
+            if empty_count == 1:
+                grid[next_row][next_col] = EMPTY
+                for wall_row, wall_col in adjacent_cells(next_row, next_col):
+                    if grid[wall_row][wall_col] == WALL:
+                        frontier.add((wall_row, wall_col))
+
+        empty_cells = [(row, col) for row in range(1, height-1) 
+                      for col in range(1, width-1) 
+                      if grid[row][col] == EMPTY]
+
+        start_pos, goal_pos = random.sample(empty_cells, 2)
+        grid[start_pos[0]][start_pos[1]] = START
+        grid[goal_pos[0]][goal_pos[1]] = GOAL
+
+        return Maze(grid)
