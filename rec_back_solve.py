@@ -28,12 +28,14 @@ def open_maze():
     print(f"Robot starting position: ({x_start},{y_start})")
     return x_start, y_start
 
+def find_next_move(x, y):
+    """Finds the next best spot to move based on recursive backtracking."""
 
 def main():
     """Initiates the solving algorithm."""
     x_start, y_start = open_maze()
-    robinator3000 = Robot(x_start,y_start, False)
-    print(robinator3000.x)
+    robotinator3000 = Robot(x_start,y_start, False)
+    print(robotinator3000.x)
 
 if __name__ == "__main__":
     main()
