@@ -10,5 +10,3 @@ class Robot():
     def set_position(x, y):
         self.x = x
         self.y = y
-
-    
