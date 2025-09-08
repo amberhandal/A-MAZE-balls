@@ -3,27 +3,37 @@
 # This program solves a maze using recursive backtracking.
 
 import numpy as np
-import maze
-import robot
+# from maze import Maze
+from robot import Robot
 
-from pathlib import Path
+# from pathlib import Path
 
 def open_maze():
     """Pulls in the maze file and finds the start."""
-    # path = Path('test-maze.txt')
-    # contents = path.read_text()
-    # lines = contents.splitlines()
-    # for line in lines:
-    #     print(line)
+    maze = np.array([['#','#','#','#','#','#'],
+                    ['#','R','#','#','#','#'],
+                    ['#',' ',' ',' ','G','#'],
+                    ['#','#','#','#','#','#']])
+    # print(maze)
+    xx = 0
+    for row in maze:
+        yy = 0
+        for element in row:
+            #print(f"({xx},{yy}) ")
+            if element == 'R':
+                x_start, y_start = xx,yy
+            yy +=1
+        xx += 1
 
-    np.array([['#','#','#','#','#','#'],
-              ['#','R','#','#','#','#'],
-              ['#',' ',' ',' ','G','#'],
-              ['#','#','#','#','#','#']])
+    print(f"Robot starting position: ({x_start},{y_start})")
+    return x_start, y_start
+
 
 def main():
     """Initiates the solving algorithm."""
-    open_maze()
+    x_start, y_start = open_maze()
+    robinator3000 = Robot(x_start,y_start, False)
+    print(robinator3000.x)
 
 if __name__ == "__main__":
     main()
