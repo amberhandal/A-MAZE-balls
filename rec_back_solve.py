@@ -71,7 +71,7 @@ def solve_maze(maze, x=None, y=None, visited=None):
             return True
 
     maze.grid[y][x] = EMPTY
-
+    
     return False
 ############################### End_Citation [1] ###############################
 
