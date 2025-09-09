@@ -1,2 +1,4 @@
-[1] https://inventwithpython.com/recursion/chapter4.html
+[1] A. Sweigart, “Backtracking and Tree Traversal Algorithms,” in The Recursive Book of Recursion, Invent with Python, [Online]. 
+Available: https://inventwithpython.com/recursion/chapter4.html
+
 [2] https://www.w3schools.com/python/python_file_open.asp

@@ -15,13 +15,12 @@ START = MazeSymbols.START
 GOAL = MazeSymbols.GOAL
 PATH: str = '.'
 
-# Get the height and width of the maze and find start location
+# Get the height and width of the maze.
 HEIGHT = maze.height
 WIDTH = maze.width
 
 def find_start(maze):
     """Pulls in the maze file and finds the start."""
-
     # Find the start position of the robot
     xx = 0
     for row in maze:
@@ -35,6 +34,7 @@ def find_start(maze):
     print(f"Robot starting position: ({x_start},{y_start})")
     return x_start, y_start
 
+############################### Beign_Citation [1, mazeSolver.py] ###############################
 def solve_maze(maze, x=None, y=None, visited=None):
     """Solves the maze using recursive backtracking"""
     if x == None or y == None:
@@ -73,6 +73,7 @@ def solve_maze(maze, x=None, y=None, visited=None):
     maze.grid[y][x] = EMPTY
 
     return False
+############################### End_Citation [1] ###############################
 
 def main():
     """Initiates the solving algorithm."""
