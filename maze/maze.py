@@ -11,14 +11,19 @@ import random
 
 Pos = Tuple[int, int]
 
-@dataclass(frozen=True)
+############################### Begin_Citation [3] ############################
+@dataclass
 class MazeSymbols:
     WALL: str = '█'
     EMPTY: str = ' '
     START: str = 'R'
     GOAL: str = 'G'
+############################### End_Citation [3]  #############################
 
 class Maze:
+    ############################### Begin_Citation [4] ############################
+    # Creation from list -> ndarray, dtype as unicode scalars, and shape handling are
+    # guided by NumPy ndarray semantics and documentation.
     def __init__(self, grid: np.ndarray | List[str], symbols: MazeSymbols = MazeSymbols()) -> None:
         self.symbols = symbols
         if isinstance(grid, list):
@@ -27,7 +32,10 @@ class Maze:
             self.grid = grid
 
         self.height, self.width = self.grid.shape
+    ############################### End_Citation [4] #############################
 
+        ############################### Begin_Citation [5] ############################
+        # Use of Optional[Pos] for possibly-absent start/goal positions is aligned with typing docs.
         self._start_pos = self._find_position(self.symbols.START)
         self._goal_pos = self._find_position(self.symbols.GOAL)
 
@@ -55,6 +63,7 @@ class Maze:
     @property
     def goal_position(self) -> Optional[Pos]:
         return self._goal_pos
+    ############################### End_Citation [5]  ############################
 
     @staticmethod
     def from_json(file_path: str, maze_key: str = 'DEFAULT_MAZE') -> 'Maze':
@@ -63,7 +72,10 @@ class Maze:
             if maze_key not in data:
                 raise KeyError(f"Maze key '{maze_key}' not found in template file")
             return Maze(data[maze_key]['grid'])
-        
+
+    ############################### Begin_Citation [6] ############################
+    # The structure of this generator (frontier expansion, carve if exactly one adjacent empty,
+    # 4-neighborhood) is adapted from Jamis Buck's description of Prim's algorithm for mazes.
     @staticmethod
     def from_prims(width: int, height: int) -> 'Maze':
         WALL = MazeSymbols.WALL
@@ -88,10 +100,13 @@ class Maze:
         col = random.randint(1, width - 2)
         grid[row][col] = EMPTY
 
+        ############################### Begin_Citation [7] ############################
+        # Use of a set for the frontier collection and add/remove operations.
         frontier = set()
         for next_row, next_col in adjacent_cells(row, col):
             if grid[next_row][next_col] == WALL:
                 frontier.add((next_row, next_col))
+        ############################### End_Citation [7]  #############################
 
         while frontier:
             next_cell = random.choice(tuple(frontier))
@@ -118,3 +133,4 @@ class Maze:
         grid[goal_pos[0]][goal_pos[1]] = GOAL
 
         return Maze(grid)
+    ############################### End_Citation [6]  #############################

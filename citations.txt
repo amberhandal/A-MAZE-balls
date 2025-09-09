@@ -2,3 +2,13 @@
 Available: https://inventwithpython.com/recursion/chapter4.html
 
 [2] https://www.w3schools.com/python/python_file_open.asp
+
+[3] Python Software Foundation, “dataclasses — Data Classes,” Python 3.12 Documentation. Accessed: Sep. 9, 2025. Available: https://docs.python.org/3/library/dataclasses.html
+
+[4] NumPy Developers, “ndarray,” NumPy v2.x Reference. Accessed: Sep. 9, 2025. Available: https://numpy.org/doc/stable/reference/arrays.ndarray.html
+
+[5] Python Software Foundation, “typing — Support for type hints,” Python 3.12 Documentation. Accessed: Sep. 9, 2025. Available: https://docs.python.org/3/library/typing.html
+
+[6] J. Buck, “Maze Generation: Prim’s Algorithm,” weblog.jamisbuck.org, Jan. 10, 2011. Accessed: Sep. 9, 2025. Available: https://weblog.jamisbuck.org/2011/1/10/maze-generation-prim-s-algorithm
+
+[7] W3Schools, “Python Sets,” w3schools.com. Accessed: Sep. 9, 2025. Available: https://www.w3schools.com/python/python_sets.asp
